@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import Input from './Input'
 import ReadonlyInput from './ReadonlyInput'
 import { USDMClient } from 'binance'
+import TerminalInfo from './TerminalInfo'
 
 export default function Terminal() {
 
@@ -59,9 +60,7 @@ export default function Terminal() {
             <ReadonlyInput label="Balance" updatableValue={getBalance} />
           </div>
           <div className='flex flex-col w-2/3'>
-            <div className='w-full h-full flex items-center justify-center'>
-              here will be more info
-            </div>
+            <TerminalInfo {...{ ...{ client: client }, ...data }} />
           </div>
         </div>
       </div>
