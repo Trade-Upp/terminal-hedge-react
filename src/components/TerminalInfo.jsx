@@ -19,6 +19,7 @@ export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, clien
     })
 
     wsClient.on('formattedMessage', (data) => {
+      updateInfo()
     })
 
     // read response to command sent via WS stream (e.g LIST_SUBSCRIPTIONS)
