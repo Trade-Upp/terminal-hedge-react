@@ -22,11 +22,12 @@ export default function Input({ label, type = 'text', localStorageKey, defaultVa
   return (
     <>
       <div className="flex flex-row flex-nowrap p-2">
-        <label className="basis-1/3">{label}</label>
+        <label className="md:basis-1/3 w-0">{label}</label>
         <input
           type={type}
-          className="basis-2/3"
+          className="md:basis-2/3 w-full"
           onChange={onChange}
+          placeholder={label}
           value={value}
           checked={value === true || value === 'true'}></input>
       </div>
