@@ -133,7 +133,7 @@ export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, clien
               let sizeClass = getSizeClass(position.positionSide)
               let profitClass = getProfitClass(position.profit)
               return (
-                <tr key={position.positionSide} class="border-b border-zinc-700">
+                <tr key={position.positionSide} className="border-b border-zinc-700">
                   <th scope="row" className={sizeClass}>
                     {position.size}
                   </th>
