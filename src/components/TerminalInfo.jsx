@@ -108,22 +108,22 @@ export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, clien
   return (
     <>
       <div className="overflow-x-auto p-2">
-        <table class="thin-scrollbar w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead class="text-xs uppercase text-gray-400 bg-zinc-900">
+        <table className="thin-scrollbar w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead className="text-xs uppercase text-gray-400 bg-zinc-900">
             <tr>
-              <th scope="col" class="px-6 py-3">
+              <th scope="col" className="px-6 py-3">
                 Size
               </th>
-              <th scope="col" class="px-6 py-3">
+              <th scope="col" className="px-6 py-3">
                 Entry price
               </th>
-              <th scope="col" class="px-6 py-3">
+              <th scope="col" className="px-6 py-3">
                 Profit
               </th>
-              <th scope="col" class="px-6 py-3">
+              <th scope="col" className="px-6 py-3">
                 Liquidation
               </th>
-              <th scope="col" class="px-6 py-3">
+              <th scope="col" className="px-6 py-3">
                 Margin
               </th>
             </tr>
@@ -134,19 +134,19 @@ export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, clien
               let profitClass = getProfitClass(position.profit)
               return (
                 <tr key={position.positionSide} class="border-b border-zinc-700">
-                  <th scope="row" class={sizeClass}>
+                  <th scope="row" className={sizeClass}>
                     {position.size}
                   </th>
-                  <td class="px-6 py-4">
+                  <td className="px-6 py-4">
                     {position.entryPrice}
                   </td>
-                  <td class={profitClass}>
+                  <td className={profitClass}>
                     {position.profit}
                   </td>
-                  <td class="px-6 py-4">
+                  <td className="px-6 py-4">
                     {position.liquidation}
                   </td>
-                  <td class="px-6 py-4">
+                  <td className="px-6 py-4">
                     {position.margin}
                   </td>
                 </tr>
