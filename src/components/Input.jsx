@@ -22,10 +22,10 @@ export default function Input({ label, type = 'text', localStorageKey, defaultVa
   return (
     <>
       <div className="flex flex-row flex-nowrap p-2">
-        <label className="md:basis-1/3 w-0">{label}</label>
+        <label className="md:basis-1/3 md:inline hidden">{label}</label>
         <input
           type={type}
-          className="md:basis-2/3 w-full"
+          className="md:basis-2/3 w-full min-h-5"
           onChange={onChange}
           placeholder={label}
           value={value}
