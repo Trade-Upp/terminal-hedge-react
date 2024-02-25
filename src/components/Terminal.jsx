@@ -7,11 +7,15 @@ import TerminalInfo from './TerminalInfo'
 export default function Terminal() {
 
   function getTerminalData() {
+    const symbol = localStorage.getItem('symbol')
+    const apiKey = localStorage.getItem('apiKey')
+    const apiSecret = localStorage.getItem('apiSecret')
+    const testnet = localStorage.getItem('testnet')
     return {
-      symbol: localStorage.getItem('symbol'),
-      apiKey: localStorage.getItem('apiKey'),
-      apiSecret: localStorage.getItem('apiSecret'),
-      testnet: localStorage.getItem('testnet')
+      symbol: symbol || '',
+      apiKey: apiKey || '',
+      apiSecret: apiSecret || '',
+      testnet: testnet || ''
     }
   }
 
