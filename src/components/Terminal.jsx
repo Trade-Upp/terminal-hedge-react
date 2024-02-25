@@ -49,7 +49,7 @@ export default function Terminal() {
 
   return (
     <>
-      <div className='container mx-auto'>
+      <div className='container mx-auto container-bg rounded mt-4'>
         <div className='flex flex-row'>
           <div className='flex flex-col w-1/3'>
             <Input label="Symbol" localStorageKey='symbol' defaultValue={data.symbol} />
