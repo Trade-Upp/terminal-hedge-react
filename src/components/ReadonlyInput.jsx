@@ -11,9 +11,8 @@ export default function Input({ label, children, updatableValue }) {
     return 'loading...'
   }
 
-  if (updatableValue != undefined) {
-    useEffect(() => {
-
+  useEffect(() => {
+    if (updatableValue != undefined) {
       const updateValue = () => {
         updatableValue()
           .then((result) => {
@@ -40,8 +39,8 @@ export default function Input({ label, children, updatableValue }) {
       return () => {
         clearInterval(intervalUpdatingValue)
       }
-    }, [])
-  }
+    }
+  }, [])
 
   return (
     <>

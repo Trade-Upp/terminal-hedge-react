@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Input({ label, type = 'text', localStorageKey, defaultValue }) {
+export default function Input({ label, type = 'text', localStorageKey, defaultValue, updateValue }) {
 
   const [value, setValue] = useState(defaultValue == undefined ? '' : defaultValue)
 
@@ -29,7 +29,9 @@ export default function Input({ label, type = 'text', localStorageKey, defaultVa
           onChange={onChange}
           placeholder={label}
           value={value}
-          checked={value === true || value === 'true'}></input>
+          checked={value === true || value === 'true'}
+          onBlur={updateValue}
+        />
       </div>
     </>
   )

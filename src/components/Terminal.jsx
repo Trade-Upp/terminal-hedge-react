@@ -20,11 +20,11 @@ export default function Terminal() {
   }
 
   const [data, setData] = useState(getTerminalData())
-  const client = new USDMClient({
+  const client = (data.apiKey && data.apiSecret) ? new USDMClient({
     api_key: data.apiKey,
     api_secret: data.apiSecret,
     useTestnet: data.testnet
-  });
+  }) : undefined;
 
   useEffect(() => {
 
@@ -35,13 +35,18 @@ export default function Terminal() {
       })
     }
 
-    updateTimeOffset()
-    const intervalUpdatingTimeOffset = setInterval(() => {
+    let intervalUpdatingTimeOffset
+    if (client != undefined) {
       updateTimeOffset()
-    }, 100 * 1000)
+      intervalUpdatingTimeOffset = setInterval(() => {
+        updateTimeOffset()
+      }, 100 * 1000)
+    }
 
     return () => {
-      clearInterval(intervalUpdatingTimeOffset)
+      if (intervalUpdatingTimeOffset != undefined) {
+        clearInterval(intervalUpdatingTimeOffset)
+      }
     }
   }, [])
 
@@ -52,16 +57,37 @@ export default function Terminal() {
     return usdtBalanceBalance
   }
 
+  function updateSymbol(event) {
+    const value = event.target.value
+    const dataCopy = { ...data }
+    dataCopy.symbol = value
+    setData(dataCopy)
+  }
+
+  function updateApiKey(event) {
+    const value = event.target.value
+    const dataCopy = { ...data }
+    dataCopy.apiKey = value
+    setData(dataCopy)
+  }
+
+  function updateApiSecret(event) {
+    const value = event.target.value
+    const dataCopy = { ...data }
+    dataCopy.apiSecret = value
+    setData(dataCopy)
+  }
+
   return (
     <>
       <div className='container mx-auto container-bg rounded mt-4'>
         <div className='flex flex-row'>
           <div className='flex flex-col w-1/3'>
-            <Input label="Symbol" localStorageKey='symbol' defaultValue={data.symbol} />
-            <Input label="API KEY" localStorageKey='apiKey' defaultValue={data.apiKey} />
-            <Input label="API SECRET" localStorageKey='apiSecret' defaultValue={data.apiSecret} />
+            <Input label="Symbol" localStorageKey='symbol' defaultValue={data.symbol} updateValue={updateSymbol} />
+            <Input label="API KEY" localStorageKey='apiKey' defaultValue={data.apiKey} updateValue={updateApiKey} />
+            <Input label="API SECRET" localStorageKey='apiSecret' defaultValue={data.apiSecret} updateValue={updateApiSecret} />
             <Input label="testnet" type='checkbox' localStorageKey='testnet' defaultValue={data.testnet} />
-            <ReadonlyInput label="Balance" updatableValue={getBalance} />
+            <ReadonlyInput label="Balance" updatableValue={client == undefined ? undefined : getBalance} />
           </div>
           <div className='flex flex-col w-2/3'>
             <TerminalInfo {...{ ...{ client: client }, ...data }} />

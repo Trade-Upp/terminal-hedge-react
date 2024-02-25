@@ -48,9 +48,12 @@ export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, clien
       clearTimeout(updateInfoTimeout)
       wsClient.closeAll()
     }
-  }, [])
+  }, [client])
 
   async function updateInfo() {
+    if (client == undefined) {
+      return
+    }
     const openOrders = await client.getAllOpenOrders({ symbol: symbol })
     const positions = await client.getPositions({ symbol: symbol })
     console.log('openOrders', openOrders);
