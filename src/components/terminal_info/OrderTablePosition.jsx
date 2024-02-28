@@ -27,6 +27,14 @@ export default function OrderTablePosition({ position, thClasses }) {
     return result
   }
 
+  function getEntryPriceInputClass(value) {
+    let result = "w-20"
+    if (entryPriceInputValue < 0) {
+      result += " input-invalid"
+    }
+    return result
+  }
+
   let sizeClass = getSizeClass(position.positionSide)
   let profitClass = getProfitClass(position.profit)
 
@@ -56,10 +64,10 @@ export default function OrderTablePosition({ position, thClasses }) {
           <button>Limit</button>
         </td>
         <td className={thClasses}>
-          <input className="w-20" value={entryPriceInputValue} onChange={(e) => setEntryPriceInputValue(e.target.value)} />
+          <input className={getEntryPriceInputClass()} value={entryPriceInputValue} type="number" step="any" onChange={(e) => setEntryPriceInputValue(e.target.value)} />
         </td>
         <td className={thClasses}>
-          <input className="w-20" value={positionAmtInputValue} onChange={(e) => setPositionAmtInputValue(e.target.value)} />
+          <input className="w-20" value={positionAmtInputValue} type="number" step="any" onChange={(e) => setPositionAmtInputValue(e.target.value)} />
         </td>
       </tr>
     </>
