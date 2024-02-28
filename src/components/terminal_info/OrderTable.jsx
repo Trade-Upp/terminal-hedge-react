@@ -62,7 +62,6 @@ export default function OrderTable({ positions }) {
             return (
               <tr key={position.positionSide} className="border-b border-zinc-700">
                 <th scope="row" className={sizeClass}>
-                  {/* TODO: size is wrong */}
                   {position.size}
                 </th>
                 <td className={thClasses}>

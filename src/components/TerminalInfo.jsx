@@ -73,7 +73,7 @@ export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, clien
         return
       }
       result.push({
-        size: parseFloat(position.positionAmt) * parseFloat(position.leverage),
+        size: Math.round(parseFloat(position.notional) * 100) / 100,
         positionAmt: position.positionAmt,
         entryPrice: position.entryPrice,
         profit: Math.round(parseFloat(position.unRealizedProfit) * 1e2) / 1e2,
