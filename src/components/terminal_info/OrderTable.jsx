@@ -1,6 +1,6 @@
 import OrderTablePosition from "./OrderTablePosition"
 
-export default function OrderTable({ positions, client }) {
+export default function OrderTable({ positions, client, symbol }) {
 
   const thClasses = "px-2 py-3"
 
@@ -36,7 +36,7 @@ export default function OrderTable({ positions, client }) {
           </tr>
         </thead>
         <tbody className="bg-zinc-800">
-          {positions.map((position) => <OrderTablePosition position={position} thClasses={thClasses} />)}
+          {positions.map((position) => <OrderTablePosition position={position} thClasses={thClasses} client={client} symbol={symbol} />)}
         </tbody>
       </table>
     </>

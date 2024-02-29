@@ -92,7 +92,7 @@ export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, clien
   return (
     <>
       <div className="overflow-x-auto p-2">
-        <OrderTable positions={data.positions} />
+        <OrderTable positions={data.positions} client={client} symbol={symbol} />
       </div>
     </>
   )
