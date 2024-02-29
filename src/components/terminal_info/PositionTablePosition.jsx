@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { roundPrice, roundQuantity } from "../../utils/ExchangeInfoUtil"
 
-export default function OrderTablePosition({ position, thClasses, client, symbol }) {
+export default function PositionTablePosition({ position, thClasses, client, symbol }) {
 
   const [entryPriceInputValue, setEntryPriceInputValue] = useState(position.entryPrice)
   const [positionAmtInputValue, setPositionAmtInputValue] = useState(position.positionAmt)
