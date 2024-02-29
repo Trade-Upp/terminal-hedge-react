@@ -1,6 +1,6 @@
 import OrderTablePosition from "./OrderTablePosition"
 
-export default function OrderTable({ positions, client, symbol }) {
+export default function PositionTable({ positions, client, symbol }) {
 
   const thClasses = "px-2 py-3"
 

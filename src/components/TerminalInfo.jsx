@@ -1,6 +1,6 @@
 import { USDMClient, WebsocketClient } from "binance"
 import { useEffect, useState } from "react"
-import OrderTable from "./terminal_info/OrderTable"
+import PositionTable from "./terminal_info/PositionTable"
 
 export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, client }) {
 
@@ -92,7 +92,7 @@ export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, clien
   return (
     <>
       <div className="overflow-x-auto p-2">
-        <OrderTable positions={data.positions} client={client} symbol={symbol} />
+        <PositionTable positions={data.positions} client={client} symbol={symbol} />
       </div>
     </>
   )
