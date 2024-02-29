@@ -81,15 +81,15 @@ export default function Terminal() {
   return (
     <>
       <div className='container mx-auto container-bg rounded mt-4'>
-        <div className='flex flex-row'>
-          <div className='flex flex-col w-1/3'>
+        <div className='flex md:flex-row flex-col'>
+          <div className='flex flex-col md:w-1/3 w-full'>
             <Input label="Symbol" localStorageKey='symbol' defaultValue={data.symbol} updateValue={updateSymbol} />
             <Input label="API KEY" localStorageKey='apiKey' defaultValue={data.apiKey} updateValue={updateApiKey} />
             <Input label="API SECRET" localStorageKey='apiSecret' defaultValue={data.apiSecret} updateValue={updateApiSecret} />
             <Input label="testnet" type='checkbox' localStorageKey='testnet' defaultValue={data.testnet} />
             <ReadonlyInput label="Balance" updatableValue={client == undefined ? undefined : getBalance} />
           </div>
-          <div className='flex flex-col w-2/3'>
+          <div className='flex flex-col md:w-2/3 w-full'>
             <TerminalInfo {...{ ...{ client: client }, ...data }} />
           </div>
         </div>
