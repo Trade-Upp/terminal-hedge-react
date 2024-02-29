@@ -90,3 +90,14 @@ button:focus-visible {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px     rgba(0,0,0,0.5); 
 }
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input-invalid {
+  background: #6e0718;
+  border-color: #8f0a20;
+}

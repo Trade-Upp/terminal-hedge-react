@@ -1,5 +1,6 @@
 import { USDMClient, WebsocketClient } from "binance"
 import { useEffect, useState } from "react"
+import OrderTable from "./terminal_info/OrderTable"
 
 export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, client }) {
 
@@ -72,9 +73,10 @@ export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, clien
         return
       }
       result.push({
-        size: position.positionAmt,
+        size: Math.round(parseFloat(position.notional) * 100) / 100,
+        positionAmt: position.positionAmt,
         entryPrice: position.entryPrice,
-        profit: position.unRealizedProfit,
+        profit: Math.round(parseFloat(position.unRealizedProfit) * 1e2) / 1e2,
         liquidation: position.liquidationPrice,
         margin: position.isolated ? 'isolated' : 'cross',
         positionSide: position.positionSide,
@@ -87,77 +89,10 @@ export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, clien
     positions: []
   })
 
-  function getSizeClass(positionSide) {
-    let result = "px-6 py-4 "
-    if (positionSide == 'LONG') {
-      result += "text-green-700"
-    }
-    else {
-      result += "text-red-700"
-    }
-    return result
-  }
-
-  function getProfitClass(profit) {
-    let result = "px-6 py-4 "
-    if (profit > 0) {
-      result += "text-green-700"
-    }
-    else {
-      result += "text-red-700"
-    }
-    return result
-  }
-
   return (
     <>
       <div className="overflow-x-auto p-2">
-        <table className="thin-scrollbar w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-xs uppercase text-gray-400 bg-zinc-900">
-            <tr>
-              <th scope="col" className="px-6 py-3">
-                Size
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Entry price
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Profit
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Liquidation
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Margin
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-zinc-800">
-            {data.positions.map((position) => {
-              let sizeClass = getSizeClass(position.positionSide)
-              let profitClass = getProfitClass(position.profit)
-              return (
-                <tr key={position.positionSide} className="border-b border-zinc-700">
-                  <th scope="row" className={sizeClass}>
-                    {position.size}
-                  </th>
-                  <td className="px-6 py-4">
-                    {position.entryPrice}
-                  </td>
-                  <td className={profitClass}>
-                    {position.profit}
-                  </td>
-                  <td className="px-6 py-4">
-                    {position.liquidation}
-                  </td>
-                  <td className="px-6 py-4">
-                    {position.margin}
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
+        <OrderTable positions={data.positions} client={client} symbol={symbol} />
       </div>
     </>
   )
