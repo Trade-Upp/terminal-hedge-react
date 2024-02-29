@@ -3,6 +3,10 @@ import { USDMClient } from "binance";
 const client = new USDMClient()
 let exchangeInfo = null
 
+client.fetchTimeOffset().then((result) => {
+  client.setTimeOffset(result)
+})
+
 export async function roundQuantity(symbol, quantity) {
   const info = await fetchExchangeInfo()
   const symbolInfo = info.symbols.find(symbolInfo => symbolInfo.symbol == symbol.toUpperCase())
