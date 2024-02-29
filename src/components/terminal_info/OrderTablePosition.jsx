@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { roundQuantity } from "../../utils/ExchangeInfoUtil"
+import { roundPrice, roundQuantity } from "../../utils/ExchangeInfoUtil"
 
 export default function OrderTablePosition({ position, thClasses, client, symbol }) {
 
@@ -60,6 +60,35 @@ export default function OrderTablePosition({ position, thClasses, client, symbol
       .catch(err => alert('something went wrong: ' + err.message));
   }
 
+  function closeLimit({ positionSide }) {
+    const quantity = getQuantity()
+    const side = getSide()
+    const price = getPrice()
+    let roundedPrice
+    roundPrice(symbol, price)
+      .then((transformedPrice) => {
+        roundedPrice = transformedPrice
+        return roundQuantity(symbol, quantity)
+      })
+      .catch((err) => alert('something went wrong: ' + err.message))
+      .then((roundedQuantity) => {
+        const newOrderInfo = {
+          symbol: symbol,
+          side: side,
+          positionSide: positionSide,
+          type: 'LIMIT',
+          quantity: roundedQuantity,
+          price: roundedPrice
+        }
+        return client.submitNewOrder(newOrderInfo)
+      })
+      .catch((err) => alert('something went wrong: ' + err.message))
+      .then((result) => {
+        console.log('new order info', result);
+      })
+      .catch(err => alert('something went wrong: ' + err.message));
+  }
+
   function getQuantity() {
     let positionSize = parseFloat(positionAmtInputValue)
     if (positionAmtInputValue.slice(-1) == '%') {
@@ -74,6 +103,10 @@ export default function OrderTablePosition({ position, thClasses, client, symbol
       throw new Error('positionSize must be greater than zero')
     }
     return positionSize
+  }
+
+  function getPrice() {
+    return parseFloat(entryPriceInputValue)
   }
 
   function getSide() {
@@ -106,12 +139,12 @@ export default function OrderTablePosition({ position, thClasses, client, symbol
         <td className={thClasses}>
           {position.margin}
         </td>
-        {/* TODO: copy functionality from python terminal */}
         <td className={thClasses}>
           <button onClick={() => closeMarket(position)}>Market</button>
         </td>
+        {/* TODO: test close limit */}
         <td className={thClasses}>
-          <button>Limit</button>
+          <button onClick={() => closeLimit(position)}>Limit</button>
         </td>
         <td className={thClasses}>
           <input className={getEntryPriceInputClass()} value={entryPriceInputValue} type="number" step="any" onChange={(e) => setEntryPriceInputValue(e.target.value)} />
@@ -122,5 +155,4 @@ export default function OrderTablePosition({ position, thClasses, client, symbol
       </tr>
     </>
   )
-
 }
