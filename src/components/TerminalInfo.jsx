@@ -1,6 +1,9 @@
 import { USDMClient, WebsocketClient } from "binance"
 import { useEffect, useState } from "react"
 import PositionTable from "./terminal_info/PositionTable"
+import OrderTable from "./terminal_info/OrderTable"
+import Tabs from "./Tabs"
+import Tab from "./Tab"
 
 export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, client }) {
 
@@ -56,14 +59,19 @@ export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, clien
     if (client == undefined) {
       return
     }
-    const openOrders = await client.getAllOpenOrders({ symbol: symbol })
-    const positions = await client.getPositions({ symbol: symbol })
-    console.log('openOrders', openOrders);
-    console.log('positions', positions);
+    const openOrdersPromise = client.getAllOpenOrders({ symbol: symbol })
+    const positionsPromise = client.getPositions({ symbol: symbol })
 
-    setData({
-      positions: transformPositions(positions)
-    })
+    try {
+      const [openOrders, positions] = await Promise.all([openOrdersPromise, positionsPromise])
+
+      setData({
+        positions: transformPositions(positions),
+        openOrders: openOrders
+      })
+    } catch (e) {
+      console.error("Error occurred:", error);
+    }
   }
 
   function transformPositions(positions) {
@@ -86,13 +94,21 @@ export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, clien
   }
 
   const [data, setData] = useState({
-    positions: []
+    positions: [],
+    openOrders: [],
   })
 
   return (
     <>
       <div className="overflow-x-auto p-2">
-        <PositionTable positions={data.positions} client={client} symbol={symbol} />
+        <Tabs>
+          <Tab title="Position List">
+            <PositionTable positions={data.positions} client={client} symbol={symbol} />
+          </Tab>
+          <Tab title="Order List">
+            <OrderTable orders={data.openOrders} client={client} symbol={symbol} />
+          </Tab>
+        </Tabs>
       </div>
     </>
   )

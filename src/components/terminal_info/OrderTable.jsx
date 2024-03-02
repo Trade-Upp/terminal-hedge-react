@@ -1,8 +1,17 @@
-import PositionTablePosition from "./PositionTablePosition"
+import OrderTableOrder from "./OrderTableOrder";
 
-export default function PositionTable({ positions, client, symbol }) {
+export default function OrderTable({ orders, client, symbol }) {
 
   const thClasses = "px-2 py-3"
+
+  function cancelAll() {
+    if (!confirm("Are you sure?")) {
+      e.preventDefault();
+    }
+    client.cancelAllOpenOrders({ symbol: symbol })
+      .then()
+      .catch(err => { alert('something went wrong: ' + err.message), console.error(err) })
+  }
 
   return (
     <>
@@ -10,33 +19,30 @@ export default function PositionTable({ positions, client, symbol }) {
         <thead className="text-xs uppercase text-gray-400 bg-zinc-900">
           <tr>
             <th scope="col" className={thClasses}>
-              Size
+              Type
             </th>
             <th scope="col" className={thClasses}>
-              Entry price
-            </th>
-            <th scope="col" className={thClasses}>
-              Profit
-            </th>
-            <th scope="col" className={thClasses}>
-              Liquidation
-            </th>
-            <th scope="col" className={thClasses}>
-              Margin
-            </th>
-            <th scope="col" colSpan={2} className={thClasses + " text-center"}>
-              Close position
+              Side
             </th>
             <th scope="col" className={thClasses}>
               Price
             </th>
             <th scope="col" className={thClasses}>
-              Size
+              Amount
+            </th>
+            <th scope="col" className={thClasses}>
+              Filled
+            </th>
+            <th scope="col" className={thClasses + " text-center"}>
+              Trigger
+            </th>
+            <th scope="col" className={thClasses}>
+              <button onClick={cancelAll}>Cancel All</button>
             </th>
           </tr>
         </thead>
         <tbody className="bg-zinc-800">
-          {positions.map((position) => <PositionTablePosition key={position.positionSide} position={position} thClasses={thClasses} client={client} symbol={symbol} />)}
+          {orders.map(order => <OrderTableOrder key={order.orderId} order={order} thClasses={thClasses} client={client} />)}
         </tbody>
       </table>
     </>
