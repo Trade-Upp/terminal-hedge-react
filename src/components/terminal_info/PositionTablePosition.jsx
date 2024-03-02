@@ -78,7 +78,8 @@ export default function PositionTablePosition({ position, thClasses, client, sym
           positionSide: positionSide,
           type: 'LIMIT',
           quantity: roundedQuantity,
-          price: roundedPrice
+          price: roundedPrice,
+          timeInForce: 'GTC'
         }
         return client.submitNewOrder(newOrderInfo)
       })
