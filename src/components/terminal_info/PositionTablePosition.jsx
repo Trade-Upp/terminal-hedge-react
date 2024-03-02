@@ -123,7 +123,7 @@ export default function PositionTablePosition({ position, thClasses, client, sym
 
   return (
     <>
-      <tr key={position.positionSide} className="border-b border-zinc-700">
+      <tr className="border-b border-zinc-700">
         <th scope="row" className={sizeClass}>
           {position.size}
         </th>

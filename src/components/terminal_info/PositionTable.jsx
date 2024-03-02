@@ -36,7 +36,7 @@ export default function PositionTable({ positions, client, symbol }) {
           </tr>
         </thead>
         <tbody className="bg-zinc-800">
-          {positions.map((position) => <PositionTablePosition position={position} thClasses={thClasses} client={client} symbol={symbol} />)}
+          {positions.map((position) => <PositionTablePosition key={position.positionSide} position={position} thClasses={thClasses} client={client} symbol={symbol} />)}
         </tbody>
       </table>
     </>
