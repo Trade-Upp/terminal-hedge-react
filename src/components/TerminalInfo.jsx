@@ -1,6 +1,9 @@
 import { USDMClient, WebsocketClient } from "binance"
 import { useEffect, useState } from "react"
 import PositionTable from "./terminal_info/PositionTable"
+import OrderTable from "./terminal_info/OrderTable"
+import Tabs from "./Tabs"
+import Tab from "./Tab"
 
 export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, client }) {
 
@@ -88,11 +91,17 @@ export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, clien
   const [data, setData] = useState({
     positions: []
   })
+  const [tabIndex, setTabIndex] = useState(0)
 
   return (
     <>
       <div className="overflow-x-auto p-2">
-        <PositionTable positions={data.positions} client={client} symbol={symbol} />
+        <Tabs>
+          <Tab onClick={() => setTabIndex(0)} isActive={tabIndex == 0}>Position List</Tab>
+          <Tab onClick={() => setTabIndex(1)} isActive={tabIndex == 1}>Order List</Tab>
+        </Tabs>
+        {tabIndex == 0 ? <PositionTable positions={data.positions} client={client} symbol={symbol} /> : ''}
+        {tabIndex == 1 ? <OrderTable /> : ''}
       </div>
     </>
   )
