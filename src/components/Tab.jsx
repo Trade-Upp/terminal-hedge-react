@@ -10,7 +10,7 @@ export default function Tab({ children, isActive, onClick, title }) {
   }
 
   return (
-    <li className="me-2">
+    <li className="me-2 md:flex-grow-0 flex-grow">
       <a className={aClass} onClick={onClick}>{title}</a>
     </li>
   )
