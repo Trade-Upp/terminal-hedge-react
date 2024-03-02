@@ -106,7 +106,7 @@ export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, clien
             <PositionTable positions={data.positions} client={client} symbol={symbol} />
           </Tab>
           <Tab title="Order List">
-            <OrderTable />
+            <OrderTable orders={data.openOrders} client={client} symbol={symbol} />
           </Tab>
         </Tabs>
       </div>
