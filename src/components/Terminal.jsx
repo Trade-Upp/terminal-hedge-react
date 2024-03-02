@@ -3,6 +3,12 @@ import Input from './Input'
 import ReadonlyInput from './ReadonlyInput'
 import { USDMClient } from 'binance'
 import TerminalInfo from './TerminalInfo'
+import Tabs from './Tabs'
+import Tab from './Tab'
+import LimitOrderCreator from './order_creators/LimitOrderCreator'
+import MarketOrderCreator from './order_creators/MarketOrderCreator'
+import StopMarketOrderCreator from './order_creators/StopMarketOrderCreator'
+import StopLimitOrderCreator from './order_creators/StopLimitOrderCreator'
 
 export default function Terminal() {
 
@@ -88,6 +94,22 @@ export default function Terminal() {
             <Input label="API SECRET" localStorageKey='apiSecret' defaultValue={data.apiSecret} updateValue={updateApiSecret} />
             <Input label="testnet" type='checkbox' localStorageKey='testnet' defaultValue={data.testnet} />
             <ReadonlyInput label="Balance" updatableValue={client == undefined ? undefined : getBalance} />
+            <div className='rounded jumbotron-bg p-2 m-2'>
+              <Tabs>
+                <Tab title="Limit">
+                  <LimitOrderCreator client={client} symbol={data.symbol} />
+                </Tab>
+                <Tab title="Market">
+                  <MarketOrderCreator client={client} symbol={data.symbol} />
+                </Tab>
+                <Tab title="Stop Market">
+                  <StopMarketOrderCreator client={client} symbol={data.symbol} />
+                </Tab>
+                <Tab title="Stop Limit">
+                  <StopLimitOrderCreator client={client} symbol={data.symbol} />
+                </Tab>
+              </Tabs>
+            </div>
           </div>
           <div className='flex flex-col md:w-2/3 w-full'>
             <TerminalInfo {...{ ...{ client: client }, ...data }} />
