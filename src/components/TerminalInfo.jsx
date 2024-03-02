@@ -59,14 +59,19 @@ export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, clien
     if (client == undefined) {
       return
     }
-    const openOrders = await client.getAllOpenOrders({ symbol: symbol })
-    const positions = await client.getPositions({ symbol: symbol })
-    console.log('openOrders', openOrders);
-    console.log('positions', positions);
+    const openOrdersPromise = client.getAllOpenOrders({ symbol: symbol })
+    const positionsPromise = client.getPositions({ symbol: symbol })
 
-    setData({
-      positions: transformPositions(positions)
-    })
+    try {
+      const [openOrders, positions] = await Promise.all([openOrdersPromise, positionsPromise])
+
+      setData({
+        positions: transformPositions(positions),
+        openOrders: openOrders
+      })
+    } catch (e) {
+      console.error("Error occurred:", error);
+    }
   }
 
   function transformPositions(positions) {
@@ -89,7 +94,8 @@ export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, clien
   }
 
   const [data, setData] = useState({
-    positions: []
+    positions: [],
+    openOrders: [],
   })
 
   return (
