@@ -1,14 +1,17 @@
 import { useState } from "react";
 
-export default function Input({ label, type = 'text', localStorageKey, defaultValue, updateValue }) {
+export default function Input({ label, type = 'text', localStorageKey, defaultValue, updateValue, onChange }) {
 
   const [value, setValue] = useState(defaultValue == undefined ? '' : defaultValue)
 
-  function onChange(event) {
+  function onChangeLocal(event) {
     const newValue = getNewValue(event.target)
     setValue(newValue)
     if (localStorageKey != undefined) {
       localStorage.setItem(localStorageKey, newValue);
+    }
+    if (onChange != undefined) {
+      onChange(event)
     }
   }
 
@@ -26,7 +29,7 @@ export default function Input({ label, type = 'text', localStorageKey, defaultVa
         <input
           type={type}
           className="md:basis-2/3 w-full min-h-5"
-          onChange={onChange}
+          onChange={onChangeLocal}
           placeholder={label}
           value={value}
           checked={value === true || value === 'true'}
