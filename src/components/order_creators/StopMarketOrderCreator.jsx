@@ -46,8 +46,8 @@ export default function StopMarketOrderCreator({ client, symbol }) {
   return (
     <>
       <div className="mt-2">
-        <Input label="Size" updateValue={() => setSize(e.target.value)} />
-        <Input label="Stop Price" updateValue={() => setStopPrice(e.target.value)} />
+        <Input label="Size" onChange={() => setSize(e.target.value)} />
+        <Input label="Stop Price" onChange={() => setStopPrice(e.target.value)} />
         <OpenLongShortButtons
           onLongClick={() => handleOrder('LONG')}
           onShortClick={() => handleOrder('SHORT')} />
