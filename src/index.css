@@ -71,6 +71,9 @@ button:focus-visible {
   background-color: #242424;
 }
 
+.jumbotron-bg {
+  background-color: #202020;
+}
 
 ::-webkit-scrollbar {
   width: 8px;
