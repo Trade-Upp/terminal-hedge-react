@@ -1,4 +1,4 @@
-export default function Tab({ children, isActive, onClick }) {
+export default function Tab({ children, isActive, onClick, title }) {
 
   let aClass = 'inline-block p-4 border-b-2 rounded-t-lg cursor-pointer'
 
@@ -10,8 +10,8 @@ export default function Tab({ children, isActive, onClick }) {
   }
 
   return (
-    <li class="me-2">
-      <a class={aClass} onClick={onClick}>{children}</a>
+    <li className="me-2">
+      <a className={aClass} onClick={onClick}>{title}</a>
     </li>
   )
 }
