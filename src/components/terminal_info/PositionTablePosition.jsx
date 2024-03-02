@@ -53,11 +53,11 @@ export default function PositionTablePosition({ position, thClasses, client, sym
         }
         return client.submitNewOrder(newOrderInfo)
       })
-      .catch((err) => alert('something went wrong: ' + err.message))
+      .catch((err) => { alert('something went wrong: ' + err.message), console.error(err.message) })
       .then((result) => {
         console.log('new order info', result);
       })
-      .catch(err => alert('something went wrong: ' + err.message));
+      .catch(err => { alert('something went wrong: ' + err.message), console.error(err.message) })
   }
 
   function closeLimit({ positionSide }) {
@@ -82,11 +82,11 @@ export default function PositionTablePosition({ position, thClasses, client, sym
         }
         return client.submitNewOrder(newOrderInfo)
       })
-      .catch((err) => alert('something went wrong: ' + err.message))
+      .catch((err) => { alert('something went wrong: ' + err.message), console.error(err.message) })
       .then((result) => {
         console.log('new order info', result);
       })
-      .catch(err => alert('something went wrong: ' + err.message));
+      .catch(err => { alert('something went wrong: ' + err.message), console.error(err.message) })
   }
 
   function getQuantity() {
