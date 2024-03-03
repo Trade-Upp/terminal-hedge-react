@@ -29,3 +29,9 @@ function fetchExchangeInfo() {
   }
   return exchangeInfo
 }
+
+export async function symbolExist(symbol) {
+  const info = await fetchExchangeInfo()
+  const symbolCopy = symbol.toUpperCase()
+  return info.symbols.some(symbolInfo => symbolInfo.symbol == symbolCopy)
+}
