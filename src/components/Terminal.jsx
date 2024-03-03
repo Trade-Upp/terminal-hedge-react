@@ -9,6 +9,8 @@ import LimitOrderCreator from './order_creators/LimitOrderCreator'
 import MarketOrderCreator from './order_creators/MarketOrderCreator'
 import StopMarketOrderCreator from './order_creators/StopMarketOrderCreator'
 import StopLimitOrderCreator from './order_creators/StopLimitOrderCreator'
+import LoadingSvg from '../assets/loading.svg'
+import { symbolExist } from "../utils/ExchangeInfoUtil"
 
 export default function Terminal() {
 
@@ -26,11 +28,37 @@ export default function Terminal() {
   }
 
   const [data, setData] = useState(getTerminalData())
+  const [loading, setLoading] = useState(true)
+
   const client = (data.apiKey && data.apiSecret) ? new USDMClient({
     api_key: data.apiKey,
     api_secret: data.apiSecret,
     useTestnet: data.testnet
   }) : undefined;
+
+  useEffect(() => {
+    if (client == undefined || data.symbol == undefined || data.symbol == '') {
+      setLoading(true)
+    }
+    else {
+      symbolExist(data.symbol)
+        .then(symbolExistResult => {
+          if (symbolExistResult) {
+            client.getAccountInformation()
+              .then(symbolExistResult => {
+                setLoading(false)
+              })
+              .catch(err => {
+                setLoading(true)
+              })
+          }
+          else {
+            setLoading(true)
+          }
+        })
+        .catch(err => setLoading(true))
+    }
+  }, [data])
 
   useEffect(() => {
 
@@ -95,24 +123,36 @@ export default function Terminal() {
             <Input label="testnet" type='checkbox' localStorageKey='testnet' defaultValue={data.testnet} />
             <ReadonlyInput label="Balance" updatableValue={client == undefined ? undefined : getBalance} />
             <div className='rounded jumbotron-bg p-2 m-2'>
-              <Tabs>
-                <Tab title="Limit">
-                  <LimitOrderCreator client={client} symbol={data.symbol} />
-                </Tab>
-                <Tab title="Market">
-                  <MarketOrderCreator client={client} symbol={data.symbol} />
-                </Tab>
-                <Tab title="Stop Market">
-                  <StopMarketOrderCreator client={client} symbol={data.symbol} />
-                </Tab>
-                <Tab title="Stop Limit">
-                  <StopLimitOrderCreator client={client} symbol={data.symbol} />
-                </Tab>
-              </Tabs>
+              {loading &&
+                <div className='flex justify-center items-center m-auto'>
+                  <img src={LoadingSvg} className='w-20' />
+                </div>
+              }
+              {!loading &&
+                <Tabs>
+                  <Tab title="Limit">
+                    <LimitOrderCreator client={client} symbol={data.symbol} />
+                  </Tab>
+                  <Tab title="Market">
+                    <MarketOrderCreator client={client} symbol={data.symbol} />
+                  </Tab>
+                  <Tab title="Stop Market">
+                    <StopMarketOrderCreator client={client} symbol={data.symbol} />
+                  </Tab>
+                  <Tab title="Stop Limit">
+                    <StopLimitOrderCreator client={client} symbol={data.symbol} />
+                  </Tab>
+                </Tabs>
+              }
             </div>
           </div>
           <div className='flex flex-col md:w-2/3 w-full'>
-            <TerminalInfo {...{ ...{ client: client }, ...data }} />
+            {loading &&
+              <div className='flex justify-center items-center m-auto'>
+                <img src={LoadingSvg} className='w-20' />
+              </div>
+            }
+            {!loading && <TerminalInfo {...{ ...{ client: client }, ...data }} />}
           </div>
         </div>
       </div>
