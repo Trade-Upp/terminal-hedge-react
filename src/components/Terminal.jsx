@@ -11,6 +11,7 @@ import StopMarketOrderCreator from './order_creators/StopMarketOrderCreator'
 import StopLimitOrderCreator from './order_creators/StopLimitOrderCreator'
 import LoadingSvg from '../assets/loading.svg'
 import { symbolExist } from "../utils/ExchangeInfoUtil"
+import ContentContainer from './ContentContainer'
 
 export default function Terminal() {
 
@@ -114,7 +115,7 @@ export default function Terminal() {
 
   return (
     <>
-      <div className='container mx-auto container-bg rounded mt-4'>
+      <ContentContainer>
         <div className='flex md:flex-row flex-col'>
           <div className='flex flex-col md:w-1/3 w-full'>
             <Input label="Symbol" localStorageKey='symbol' defaultValue={data.symbol} updateValue={updateSymbol} />
@@ -155,7 +156,7 @@ export default function Terminal() {
             {!loading && <TerminalInfo {...{ ...{ client: client }, ...data }} />}
           </div>
         </div>
-      </div>
+      </ContentContainer>
     </>
   )
 }
