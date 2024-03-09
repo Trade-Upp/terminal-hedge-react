@@ -47,8 +47,8 @@ export default function LimitOrderCreator({ client, symbol }) {
   return (
     <>
       <div className="mt-2">
-        <Input label="Size" onChange={() => setSize(e.target.value)} />
-        <Input label="Price" onChange={() => setPrice(e.target.value)} />
+        <Input label="Size" onChange={(e) => setSize(e.target.value)} />
+        <Input label="Price" onChange={(e) => setPrice(e.target.value)} />
         <OpenLongShortButtons
           onLongClick={() => handleOrder('LONG')}
           onShortClick={() => handleOrder('SHORT')} />
