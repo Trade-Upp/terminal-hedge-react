@@ -13,10 +13,10 @@ export default function StopMarketOrderCreator({ client, symbol }) {
     let roundedStopPrice
     let quantity
 
-    roundPrice(stopPrice)
+    roundPrice(symbol, stopPrice)
       .then(result => {
         roundedStopPrice = result
-        return roundQuantity(size / stopPrice)
+        return roundQuantity(symbol, size / stopPrice)
       })
       .catch(err => { alert('something went wrong: ' + err.message), console.error(err) })
       .then(result => {

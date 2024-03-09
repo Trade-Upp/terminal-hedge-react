@@ -13,11 +13,11 @@ export default function LimitOrderCreator({ client, symbol }) {
     let roundedPrice
     let quantity
 
-    roundPrice(price)
+    roundPrice(symbol, price)
       .then(result => {
         roundedPrice = result
         // XXX: in python there was `size / currentPrice`
-        return roundQuantity(size / price)
+        return roundQuantity(symbol, size / price)
       })
       .catch(err => { alert('something went wrong: ' + err.message), console.error(err) })
       .then(result => {

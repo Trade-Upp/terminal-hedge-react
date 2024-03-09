@@ -11,18 +11,18 @@ export default function StopLimitOrderCreator({ client, symbol }) {
 
   function handleOrder(positionSide) {
     const side = getSide(positionSide)
-    let roundedPrice = roundPrice(price)
-    let roundedStopPrice = roundPrice(stopPrice)
-    let quantity = roundQuantity(size / price)
-    roundPrice(price)
+    let roundedPrice
+    let roundedStopPrice
+    let quantity
+    roundPrice(symbol, price)
       .then(result => {
         roundedPrice = result
-        return roundPrice(stopPrice)
+        return roundPrice(symbol, stopPrice)
       })
       .catch(err => { alert('something went wrong: ' + err.message), console.error(err) })
       .then(result => {
         roundedStopPrice = result
-        return roundQuantity(size / price)
+        return roundQuantity(symbol, size / price)
       })
       .catch(err => { alert('something went wrong: ' + err.message), console.error(err) })
       .then(result => {
