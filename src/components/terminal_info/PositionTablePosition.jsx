@@ -4,7 +4,7 @@ import { roundPrice, roundQuantity } from "../../utils/ExchangeInfoUtil"
 export default function PositionTablePosition({ position, thClasses, client, symbol }) {
 
   const [entryPriceInputValue, setEntryPriceInputValue] = useState(position.entryPrice)
-  const [positionAmtInputValue, setPositionAmtInputValue] = useState(position.positionAmt)
+  const [positionAmtInputValue, setPositionAmtInputValue] = useState(Math.abs(position.positionAmt))
 
   function getSizeClass(positionSide) {
     let result = thClasses + " "
