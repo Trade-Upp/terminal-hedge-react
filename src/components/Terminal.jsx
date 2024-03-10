@@ -34,6 +34,14 @@ export default function Terminal({ configIndex }) {
   const [data, setData] = useState(() => getTerminalData())
   const [loading, setLoading] = useState(true)
 
+  setConfigUnit(configIndex, {
+    label: configUnit.label,
+    symbol: data.symbol,
+    API_KEY: data.apiKey,
+    API_SECRET: data.apiSecret,
+    testnet: data.testnet
+  })
+
   const client = (data.apiKey && data.apiSecret) ? new USDMClient({
     api_key: data.apiKey,
     api_secret: data.apiSecret,
