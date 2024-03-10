@@ -12,7 +12,12 @@ export default function MarketOrderCreator({ client, symbol }) {
     let quantity
     let currentPrice
 
-    client.getSymbolPriceTicker({ symbol: symbol })
+    client.fetchTimeOffset()
+      .then(timeOffset => {
+        client.setTimeOffset(timeOffset)
+        return client.getSymbolPriceTicker({ symbol: symbol })
+      })
+      .catch(err => { alert('something went wrong: ' + err.message), console.error(err) })
       .then(result => {
         currentPrice = parseFloat(result.price)
         return roundQuantity(symbol, size / currentPrice)

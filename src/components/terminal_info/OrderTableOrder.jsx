@@ -16,7 +16,12 @@ export default function OrderTableOrder({ order, thClasses, client }) {
   }
 
   function cancel() {
-    client.cancelOrder({ symbol: order.symbol, orderId: order.orderId })
+    client.fetchTimeOffset()
+      .then(timeOffset => {
+        client.setTimeOffset(timeOffset)
+        return client.cancelOrder({ symbol: order.symbol, orderId: order.orderId })
+      })
+      .catch(err => { alert('something went wrong: ' + err.message), console.error(err) })
       .then((result) => console.log('cancelled order: ' + result))
       .catch(err => { alert('something went wrong: ' + err.message), console.error(err) })
   }

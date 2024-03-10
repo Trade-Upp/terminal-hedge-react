@@ -4,8 +4,11 @@ import PositionTable from "./terminal_info/PositionTable"
 import OrderTable from "./terminal_info/OrderTable"
 import Tabs from "./Tabs"
 import Tab from "./Tab"
+import Loading from "./Loading"
 
 export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, client }) {
+
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const wsClient = new WebsocketClient(
@@ -32,6 +35,7 @@ export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, clien
     })
 
     wsClient.on('reconnecting', (data) => {
+      setIsLoading(true)
       console.log('ws automatically reconnecting.... ', data?.wsKey);
     })
 
@@ -63,14 +67,20 @@ export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, clien
     const positionsPromise = client.getPositions({ symbol: symbol })
 
     try {
+      const timeOffset = await client.fetchTimeOffset()
+      client.setTimeOffset(timeOffset)
       const [openOrders, positions] = await Promise.all([openOrdersPromise, positionsPromise])
 
-      setData({
-        positions: transformPositions(positions),
-        openOrders: openOrders
+      setData(() => {
+        return {
+          positions: transformPositions(positions),
+          openOrders: openOrders
+        }
       })
+      setIsLoading(() => false)
     } catch (e) {
-      console.error("Error occurred:", error);
+      console.error("Error occurred:", e);
+      setIsLoading(true)
     }
   }
 
@@ -103,10 +113,16 @@ export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, clien
       <div className="overflow-x-auto p-2">
         <Tabs>
           <Tab title="Position List">
-            <PositionTable positions={data.positions} client={client} symbol={symbol} />
+            <>
+              {isLoading && <Loading />}
+              {!isLoading && <PositionTable positions={data.positions} client={client} symbol={symbol} />}
+            </>
           </Tab>
           <Tab title="Order List">
-            <OrderTable orders={data.openOrders} client={client} symbol={symbol} />
+            <>
+              {isLoading && <Loading />}
+              {!isLoading && <OrderTable orders={data.openOrders} client={client} symbol={symbol} />}
+            </>
           </Tab>
         </Tabs>
       </div>

@@ -9,16 +9,20 @@ import LimitOrderCreator from './order_creators/LimitOrderCreator'
 import MarketOrderCreator from './order_creators/MarketOrderCreator'
 import StopMarketOrderCreator from './order_creators/StopMarketOrderCreator'
 import StopLimitOrderCreator from './order_creators/StopLimitOrderCreator'
-import LoadingSvg from '../assets/loading.svg'
 import { symbolExist } from "../utils/ExchangeInfoUtil"
+import ContentContainer from './ContentContainer'
+import { getConfigUnit, setConfigUnit } from '../utils/ConfigController'
+import Loading from './Loading'
 
-export default function Terminal() {
+export default function Terminal({ configIndex }) {
+
+  const configUnit = getConfigUnit(configIndex)
 
   function getTerminalData() {
-    const symbol = localStorage.getItem('symbol')
-    const apiKey = localStorage.getItem('apiKey')
-    const apiSecret = localStorage.getItem('apiSecret')
-    const testnet = localStorage.getItem('testnet')
+    const symbol = configUnit.symbol
+    const apiKey = configUnit.API_KEY
+    const apiSecret = configUnit.API_SECRET
+    const testnet = configUnit.testnet
     return {
       symbol: symbol || '',
       apiKey: apiKey || '',
@@ -27,8 +31,16 @@ export default function Terminal() {
     }
   }
 
-  const [data, setData] = useState(getTerminalData())
+  const [data, setData] = useState(() => getTerminalData())
   const [loading, setLoading] = useState(true)
+
+  setConfigUnit(configIndex, {
+    label: configUnit.label,
+    symbol: data.symbol,
+    API_KEY: data.apiKey,
+    API_SECRET: data.apiSecret,
+    testnet: data.testnet
+  })
 
   const client = (data.apiKey && data.apiSecret) ? new USDMClient({
     api_key: data.apiKey,
@@ -44,8 +56,19 @@ export default function Terminal() {
       symbolExist(data.symbol)
         .then(symbolExistResult => {
           if (symbolExistResult) {
-            client.getAccountInformation()
-              .then(symbolExistResult => {
+            client.fetchTimeOffset()
+              .then((timeOffset) => {
+                client.setTimeOffset(timeOffset)
+                return client.getAccountInformation()
+              })
+              .catch((error) => {
+                console.error(error)
+                setLoading(true)
+              })
+              .then(accountInformation => {
+                if (accountInformation == undefined) {
+                  return
+                }
                 setLoading(false)
               })
               .catch(err => {
@@ -60,31 +83,9 @@ export default function Terminal() {
     }
   }, [data])
 
-  useEffect(() => {
-
-    const updateTimeOffset = () => {
-      client.fetchTimeOffset().then((result) => {
-        client.setTimeOffset(result)
-        console.log('updated time offset', client.getTimeOffset())
-      })
-    }
-
-    let intervalUpdatingTimeOffset
-    if (client != undefined) {
-      updateTimeOffset()
-      intervalUpdatingTimeOffset = setInterval(() => {
-        updateTimeOffset()
-      }, 100 * 1000)
-    }
-
-    return () => {
-      if (intervalUpdatingTimeOffset != undefined) {
-        clearInterval(intervalUpdatingTimeOffset)
-      }
-    }
-  }, [])
-
   const getBalance = async () => {
+    const timeOffset = await client.fetchTimeOffset()
+    client.setTimeOffset(timeOffset)
     const balance = await client.getBalance()
     const usdtBalance = balance.find((element) => element.asset == 'USDT')
     const usdtBalanceBalance = Math.round(usdtBalance.balance * 100) / 100
@@ -114,20 +115,16 @@ export default function Terminal() {
 
   return (
     <>
-      <div className='container mx-auto container-bg rounded mt-4'>
+      <ContentContainer>
         <div className='flex md:flex-row flex-col'>
           <div className='flex flex-col md:w-1/3 w-full'>
-            <Input label="Symbol" localStorageKey='symbol' defaultValue={data.symbol} updateValue={updateSymbol} />
-            <Input label="API KEY" localStorageKey='apiKey' defaultValue={data.apiKey} updateValue={updateApiKey} />
-            <Input label="API SECRET" localStorageKey='apiSecret' defaultValue={data.apiSecret} updateValue={updateApiSecret} />
-            <Input label="testnet" type='checkbox' localStorageKey='testnet' defaultValue={data.testnet} />
+            <Input label="Symbol" defaultValue={data.symbol} updateValue={updateSymbol} />
+            <Input label="API KEY" defaultValue={data.apiKey} updateValue={updateApiKey} />
+            <Input label="API SECRET" defaultValue={data.apiSecret} updateValue={updateApiSecret} />
+            <Input label="testnet" type='checkbox' defaultValue={data.testnet} />
             <ReadonlyInput label="Balance" updatableValue={client == undefined ? undefined : getBalance} />
             <div className='rounded jumbotron-bg p-2 m-2'>
-              {loading &&
-                <div className='flex justify-center items-center m-auto'>
-                  <img src={LoadingSvg} className='w-20' />
-                </div>
-              }
+              {loading && <Loading />}
               {!loading &&
                 <Tabs>
                   <Tab title="Limit">
@@ -147,15 +144,11 @@ export default function Terminal() {
             </div>
           </div>
           <div className='flex flex-col md:w-2/3 w-full'>
-            {loading &&
-              <div className='flex justify-center items-center m-auto'>
-                <img src={LoadingSvg} className='w-20' />
-              </div>
-            }
+            {loading && <Loading />}
             {!loading && <TerminalInfo {...{ ...{ client: client }, ...data }} />}
           </div>
         </div>
-      </div>
+      </ContentContainer>
     </>
   )
 }

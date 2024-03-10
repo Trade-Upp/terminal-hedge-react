@@ -4,7 +4,7 @@ import { roundPrice, roundQuantity } from "../../utils/ExchangeInfoUtil"
 export default function PositionTablePosition({ position, thClasses, client, symbol }) {
 
   const [entryPriceInputValue, setEntryPriceInputValue] = useState(position.entryPrice)
-  const [positionAmtInputValue, setPositionAmtInputValue] = useState(position.positionAmt)
+  const [positionAmtInputValue, setPositionAmtInputValue] = useState(Math.abs(position.positionAmt))
 
   function getSizeClass(positionSide) {
     let result = thClasses + " "
@@ -42,8 +42,15 @@ export default function PositionTablePosition({ position, thClasses, client, sym
   function closeMarket({ positionSide }) {
     const quantity = getQuantity()
     const side = getSide()
+    let roundedQuantity
     roundQuantity(symbol, quantity)
-      .then((roundedQuantity) => {
+      .then((newQuantity) => {
+        roundedQuantity = newQuantity
+        return client.fetchTimeOffset()
+      })
+      .catch((err) => { alert('something went wrong: ' + err.message), console.error(err.message) })
+      .then(timeOffset => {
+        client.setTimeOffset(timeOffset)
         const newOrderInfo = {
           symbol: symbol,
           side: side,
@@ -65,13 +72,20 @@ export default function PositionTablePosition({ position, thClasses, client, sym
     const side = getSide()
     const price = getPrice()
     let roundedPrice
+    let roundedQuantity
     roundPrice(symbol, price)
       .then((transformedPrice) => {
         roundedPrice = transformedPrice
         return roundQuantity(symbol, quantity)
       })
       .catch((err) => alert('something went wrong: ' + err.message))
-      .then((roundedQuantity) => {
+      .then((newQuantity) => {
+        roundedQuantity = newQuantity
+        return client.fetchTimeOffset()
+      })
+      .catch((err) => { alert('something went wrong: ' + err.message), console.error(err.message) })
+      .then(timeOffset => {
+        client.setTimeOffset(timeOffset)
         const newOrderInfo = {
           symbol: symbol,
           side: side,

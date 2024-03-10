@@ -8,7 +8,12 @@ export default function OrderTable({ orders, client, symbol }) {
     if (!confirm("Are you sure?")) {
       e.preventDefault();
     }
-    client.cancelAllOpenOrders({ symbol: symbol })
+    client.fetchTimeOffset()
+      .then(timeOffset => {
+        client.setTimeOffset(timeOffset)
+        return client.cancelAllOpenOrders({ symbol: symbol })
+      })
+      .catch(err => { alert('something went wrong: ' + err.message), console.error(err) })
       .then()
       .catch(err => { alert('something went wrong: ' + err.message), console.error(err) })
   }
