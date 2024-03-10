@@ -9,9 +9,9 @@ import LimitOrderCreator from './order_creators/LimitOrderCreator'
 import MarketOrderCreator from './order_creators/MarketOrderCreator'
 import StopMarketOrderCreator from './order_creators/StopMarketOrderCreator'
 import StopLimitOrderCreator from './order_creators/StopLimitOrderCreator'
-import LoadingSvg from '../assets/loading.svg'
 import { symbolExist } from "../utils/ExchangeInfoUtil"
 import ContentContainer from './ContentContainer'
+import Loading from './Loading'
 
 export default function Terminal() {
 
@@ -124,11 +124,7 @@ export default function Terminal() {
             <Input label="testnet" type='checkbox' localStorageKey='testnet' defaultValue={data.testnet} />
             <ReadonlyInput label="Balance" updatableValue={client == undefined ? undefined : getBalance} />
             <div className='rounded jumbotron-bg p-2 m-2'>
-              {loading &&
-                <div className='flex justify-center items-center m-auto'>
-                  <img src={LoadingSvg} className='w-20' />
-                </div>
-              }
+              {loading && <Loading />}
               {!loading &&
                 <Tabs>
                   <Tab title="Limit">
@@ -148,11 +144,7 @@ export default function Terminal() {
             </div>
           </div>
           <div className='flex flex-col md:w-2/3 w-full'>
-            {loading &&
-              <div className='flex justify-center items-center m-auto'>
-                <img src={LoadingSvg} className='w-20' />
-              </div>
-            }
+            {loading && <Loading />}
             {!loading && <TerminalInfo {...{ ...{ client: client }, ...data }} />}
           </div>
         </div>
