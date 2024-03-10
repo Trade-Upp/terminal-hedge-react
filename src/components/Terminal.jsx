@@ -55,9 +55,12 @@ export default function Terminal({ configIndex }) {
               })
               .catch((error) => {
                 console.error(error)
-                alert('something went wrong:', error)
+                setLoading(true)
               })
-              .then(symbolExistResult => {
+              .then(accountInformation => {
+                if (accountInformation == undefined) {
+                  return
+                }
                 setLoading(false)
               })
               .catch(err => {
