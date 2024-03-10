@@ -1,9 +1,28 @@
 import React, { useState } from "react"
 
-export default function Tabs({ children }) {
+export default function Tabs({ children, saveIndexInStorageWithKey }) {
 
-  const [tabIndex, setTabIndex] = useState(0)
+  const [tabIndex, setTabIndex] = useState(getFirstIndex())
   let activeContent
+
+  function getFirstIndex() {
+    if (saveIndexInStorageWithKey == undefined) {
+      return 0
+    }
+    let index = localStorage.getItem(saveIndexInStorageWithKey)
+    if (index == null) {
+      index = 0
+    }
+    return index
+  }
+
+  function handleSetTabIndex(index) {
+    setTabIndex(index)
+    if (saveIndexInStorageWithKey == undefined) {
+      return
+    }
+    localStorage.setItem(saveIndexInStorageWithKey, index)
+  }
 
   return (
     <>
@@ -15,7 +34,7 @@ export default function Tabs({ children }) {
             }
             return React.cloneElement(child, {
               ...child.props,
-              onClick: () => setTabIndex(i),
+              onClick: () => handleSetTabIndex(i),
               isActive: i == tabIndex
             });
           })}

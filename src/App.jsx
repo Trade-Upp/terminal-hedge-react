@@ -19,7 +19,7 @@ function App() {
 
   return (
     <>
-      <Tabs>
+      <Tabs saveIndexInStorageWithKey='app-tab-index'>
         <Tab title="Configuration">
           <Configuration config={config} setConfig={handleSetConfig} />
         </Tab>
