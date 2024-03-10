@@ -11,15 +11,18 @@ import StopMarketOrderCreator from './order_creators/StopMarketOrderCreator'
 import StopLimitOrderCreator from './order_creators/StopLimitOrderCreator'
 import { symbolExist } from "../utils/ExchangeInfoUtil"
 import ContentContainer from './ContentContainer'
+import { getConfigUnit, setConfigUnit } from '../utils/ConfigController'
 import Loading from './Loading'
 
-export default function Terminal() {
+export default function Terminal({ configIndex }) {
+
+  const configUnit = getConfigUnit(configIndex)
 
   function getTerminalData() {
-    const symbol = localStorage.getItem('symbol')
-    const apiKey = localStorage.getItem('apiKey')
-    const apiSecret = localStorage.getItem('apiSecret')
-    const testnet = localStorage.getItem('testnet')
+    const symbol = configUnit.symbol
+    const apiKey = configUnit.API_KEY
+    const apiSecret = configUnit.API_SECRET
+    const testnet = configUnit.testnet
     return {
       symbol: symbol || '',
       apiKey: apiKey || '',
@@ -28,7 +31,7 @@ export default function Terminal() {
     }
   }
 
-  const [data, setData] = useState(getTerminalData())
+  const [data, setData] = useState(() => getTerminalData())
   const [loading, setLoading] = useState(true)
 
   const client = (data.apiKey && data.apiSecret) ? new USDMClient({
@@ -118,10 +121,10 @@ export default function Terminal() {
       <ContentContainer>
         <div className='flex md:flex-row flex-col'>
           <div className='flex flex-col md:w-1/3 w-full'>
-            <Input label="Symbol" localStorageKey='symbol' defaultValue={data.symbol} updateValue={updateSymbol} />
-            <Input label="API KEY" localStorageKey='apiKey' defaultValue={data.apiKey} updateValue={updateApiKey} />
-            <Input label="API SECRET" localStorageKey='apiSecret' defaultValue={data.apiSecret} updateValue={updateApiSecret} />
-            <Input label="testnet" type='checkbox' localStorageKey='testnet' defaultValue={data.testnet} />
+            <Input label="Symbol" defaultValue={data.symbol} updateValue={updateSymbol} />
+            <Input label="API KEY" defaultValue={data.apiKey} updateValue={updateApiKey} />
+            <Input label="API SECRET" defaultValue={data.apiSecret} updateValue={updateApiSecret} />
+            <Input label="testnet" type='checkbox' defaultValue={data.testnet} />
             <ReadonlyInput label="Balance" updatableValue={client == undefined ? undefined : getBalance} />
             <div className='rounded jumbotron-bg p-2 m-2'>
               {loading && <Loading />}
