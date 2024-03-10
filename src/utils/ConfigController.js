@@ -56,7 +56,7 @@ function minimizeConfigString(valueString) {
 }
 
 function beautifyConfigString(valueString) {
-  return JSON.stringify(JSON.parse(valueString), null, "\n")
+  return JSON.stringify(JSON.parse(valueString), null, "\t")
 }
 
 function getDefaultConfig() {

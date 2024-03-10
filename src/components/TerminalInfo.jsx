@@ -77,7 +77,7 @@ export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, clien
       })
       setIsLoading(() => false)
     } catch (e) {
-      console.error("Error occurred:", error);
+      console.error("Error occurred:", e);
       setIsLoading(true)
     }
   }
