@@ -48,7 +48,15 @@ export default function Terminal({ configIndex }) {
       symbolExist(data.symbol)
         .then(symbolExistResult => {
           if (symbolExistResult) {
-            client.getAccountInformation()
+            client.fetchTimeOffset()
+              .then((result) => {
+                client.setTimeOffset(result)
+                return client.getAccountInformation()
+              })
+              .catch((error) => {
+                console.error(error)
+                alert('something went wrong:', error)
+              })
               .then(symbolExistResult => {
                 setLoading(false)
               })
@@ -64,31 +72,9 @@ export default function Terminal({ configIndex }) {
     }
   }, [data])
 
-  useEffect(() => {
-
-    const updateTimeOffset = () => {
-      client.fetchTimeOffset().then((result) => {
-        client.setTimeOffset(result)
-        console.log('updated time offset', client.getTimeOffset())
-      })
-    }
-
-    let intervalUpdatingTimeOffset
-    if (client != undefined) {
-      updateTimeOffset()
-      intervalUpdatingTimeOffset = setInterval(() => {
-        updateTimeOffset()
-      }, 100 * 1000)
-    }
-
-    return () => {
-      if (intervalUpdatingTimeOffset != undefined) {
-        clearInterval(intervalUpdatingTimeOffset)
-      }
-    }
-  }, [])
-
   const getBalance = async () => {
+    const timeOffset = await client.fetchTimeOffset()
+    client.setTimeOffset(timeOffset)
     const balance = await client.getBalance()
     const usdtBalance = balance.find((element) => element.asset == 'USDT')
     const usdtBalanceBalance = Math.round(usdtBalance.balance * 100) / 100

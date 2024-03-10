@@ -67,6 +67,8 @@ export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, clien
     const positionsPromise = client.getPositions({ symbol: symbol })
 
     try {
+      const timeOffset = await client.fetchTimeOffset()
+      client.setTimeOffset(timeOffset)
       const [openOrders, positions] = await Promise.all([openOrdersPromise, positionsPromise])
 
       setData(() => {

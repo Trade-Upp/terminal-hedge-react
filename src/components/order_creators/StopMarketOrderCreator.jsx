@@ -21,6 +21,11 @@ export default function StopMarketOrderCreator({ client, symbol }) {
       .catch(err => { alert('something went wrong: ' + err.message), console.error(err) })
       .then(result => {
         quantity = result
+        return client.fetchTimeOffset()
+      })
+      .catch(err => { alert('something went wrong: ' + err.message), console.error(err) })
+      .then(timeOffset => {
+        client.setTimeOffset(timeOffset)
         return client.submitNewOrder({
           symbol: symbol,
           side: side,
