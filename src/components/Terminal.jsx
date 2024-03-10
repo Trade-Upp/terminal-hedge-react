@@ -49,8 +49,8 @@ export default function Terminal({ configIndex }) {
         .then(symbolExistResult => {
           if (symbolExistResult) {
             client.fetchTimeOffset()
-              .then((result) => {
-                client.setTimeOffset(result)
+              .then((timeOffset) => {
+                client.setTimeOffset(timeOffset)
                 return client.getAccountInformation()
               })
               .catch((error) => {
