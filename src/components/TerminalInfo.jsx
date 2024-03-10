@@ -26,7 +26,6 @@ export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, clien
     })
 
     wsClient.on('formattedMessage', (data) => {
-      updateInfo()
     })
 
     // read response to command sent via WS stream (e.g LIST_SUBSCRIPTIONS)
@@ -49,12 +48,13 @@ export default function TerminalInfo({ symbol, apiKey, apiSecret, testnet, clien
 
     wsClient.subscribeKlines(symbol, '5m', 'usdm')
 
-    const updateInfoTimeout = setTimeout(() => {
+    updateInfo().then()
+    const updateInfoTimeout = setInterval(() => {
       updateInfo().then()
-    }, 1500)
+    }, 2500)
 
     return () => {
-      clearTimeout(updateInfoTimeout)
+      clearInterval(updateInfoTimeout)
       wsClient.closeAll()
     }
   }, [client])
