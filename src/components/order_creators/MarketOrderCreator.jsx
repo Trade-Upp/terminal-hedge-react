@@ -2,6 +2,7 @@ import { useState } from "react"
 import Input from "../Input"
 import OpenLongShortButtons from "./OpenLongShortButtons"
 import { roundQuantity } from "../../utils/ExchangeInfoUtil"
+import { notifySuccess } from "../notifications/NotificationsComponent"
 
 export default function MarketOrderCreator({ client, symbol }) {
 
@@ -17,12 +18,12 @@ export default function MarketOrderCreator({ client, symbol }) {
         client.setTimeOffset(timeOffset)
         return client.getSymbolPriceTicker({ symbol: symbol })
       })
-      .catch(err => { alert('something went wrong: ' + err.message), console.error(err) })
+      .catch(err => { notifyError(err.message), console.error(err) })
       .then(result => {
         currentPrice = parseFloat(result.price)
         return roundQuantity(symbol, size / currentPrice)
       })
-      .catch(err => { alert('something went wrong: ' + err.message), console.error(err) })
+      .catch(err => { notifyError(err.message), console.error(err) })
       .then(result => {
         quantity = result
         return client.submitNewOrder({
@@ -33,9 +34,9 @@ export default function MarketOrderCreator({ client, symbol }) {
           quantity: quantity
         })
       })
-      .catch(err => { alert('something went wrong: ' + err.message), console.error(err) })
-      .then(result => console.log('new order info', result))
-      .catch(err => { alert('something went wrong: ' + err.message), console.error(err) })
+      .catch(err => { notifyError(err.message), console.error(err) })
+      .then(result => { notifySuccess('ok'), console.log('new order info', result) })
+      .catch(err => { notifyError(err.message), console.error(err) })
   }
 
   function getSide(positionSide) {

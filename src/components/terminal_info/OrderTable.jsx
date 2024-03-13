@@ -13,9 +13,9 @@ export default function OrderTable({ orders, client, symbol }) {
         client.setTimeOffset(timeOffset)
         return client.cancelAllOpenOrders({ symbol: symbol })
       })
-      .catch(err => { alert('something went wrong: ' + err.message), console.error(err) })
+      .catch(err => { notifyError(err.message), console.error(err) })
       .then()
-      .catch(err => { alert('something went wrong: ' + err.message), console.error(err) })
+      .catch(err => { notifyError(err.message), console.error(err) })
   }
 
   return (

@@ -13,6 +13,7 @@ import { symbolExist } from "../utils/ExchangeInfoUtil"
 import ContentContainer from './ContentContainer'
 import { getConfigUnit, setConfigUnit } from '../utils/ConfigController'
 import Loading from './Loading'
+import { notifyError } from './notifications/NotificationsComponent'
 
 export default function Terminal({ configIndex }) {
 
@@ -62,6 +63,7 @@ export default function Terminal({ configIndex }) {
                 return client.getAccountInformation()
               })
               .catch((error) => {
+                notifyError(error.message)
                 console.error(error)
                 setLoading(true)
               })

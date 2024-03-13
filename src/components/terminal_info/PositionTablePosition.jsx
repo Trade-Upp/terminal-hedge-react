@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { roundPrice, roundQuantity } from "../../utils/ExchangeInfoUtil"
+import { notifyError, notifySuccess } from "../notifications/NotificationsComponent"
 
 export default function PositionTablePosition({ position, thClasses, client, symbol }) {
 
@@ -48,7 +49,7 @@ export default function PositionTablePosition({ position, thClasses, client, sym
         roundedQuantity = newQuantity
         return client.fetchTimeOffset()
       })
-      .catch((err) => { alert('something went wrong: ' + err.message), console.error(err.message) })
+      .catch((err) => { notifyError(err.message), console.error(err.message) })
       .then(timeOffset => {
         client.setTimeOffset(timeOffset)
         const newOrderInfo = {
@@ -60,11 +61,12 @@ export default function PositionTablePosition({ position, thClasses, client, sym
         }
         return client.submitNewOrder(newOrderInfo)
       })
-      .catch((err) => { alert('something went wrong: ' + err.message), console.error(err.message) })
+      .catch((err) => { notifyError(err.message), console.error(err.message) })
       .then((result) => {
+        notifySuccess('ok')
         console.log('new order info', result);
       })
-      .catch(err => { alert('something went wrong: ' + err.message), console.error(err.message) })
+      .catch(err => { notifyError(err.message), console.error(err.message) })
   }
 
   function closeLimit({ positionSide }) {
@@ -78,12 +80,12 @@ export default function PositionTablePosition({ position, thClasses, client, sym
         roundedPrice = transformedPrice
         return roundQuantity(symbol, quantity)
       })
-      .catch((err) => alert('something went wrong: ' + err.message))
+      .catch((err) => notifyError(err.message))
       .then((newQuantity) => {
         roundedQuantity = newQuantity
         return client.fetchTimeOffset()
       })
-      .catch((err) => { alert('something went wrong: ' + err.message), console.error(err.message) })
+      .catch((err) => { notifyError(err.message), console.error(err.message) })
       .then(timeOffset => {
         client.setTimeOffset(timeOffset)
         const newOrderInfo = {
@@ -97,11 +99,12 @@ export default function PositionTablePosition({ position, thClasses, client, sym
         }
         return client.submitNewOrder(newOrderInfo)
       })
-      .catch((err) => { alert('something went wrong: ' + err.message), console.error(err.message) })
+      .catch((err) => { notifyError(err.message), console.error(err.message) })
       .then((result) => {
+        notifySuccess('ok')
         console.log('new order info', result);
       })
-      .catch(err => { alert('something went wrong: ' + err.message), console.error(err.message) })
+      .catch(err => { notifyError(err.message), console.error(err.message) })
   }
 
   function getQuantity() {
@@ -114,7 +117,7 @@ export default function PositionTablePosition({ position, thClasses, client, sym
     }
     positionSize = Math.abs(positionSize)
     if (positionSize < 0) {
-      alert('not allowed')
+      notifyError('not allowed')
       throw new Error('positionSize must be greater than zero')
     }
     return positionSize
