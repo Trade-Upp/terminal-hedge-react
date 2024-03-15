@@ -10,7 +10,7 @@ export default function ErrorNotification({ children, progress, onClick }) {
   return (
     <>
       <div className='m-4 pointer-events-auto select-none' onClick={onClick}>
-        <div className='rounded bg-red-700 opacity-80 text-slate-50 h-12'>
+        <div className='rounded bg-red-700 opacity-80 text-slate-50'>
           <NotificationProgress
             icon={icon}
             progress={progress}

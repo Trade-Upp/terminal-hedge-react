@@ -13,7 +13,7 @@ export default function NotificationProgress({ icon, children, progress, progres
   return (
     <>
       <div className='size-full font-bold'>
-        <div className='size-full flex items-center justify-center'>
+        <div className='size-full flex items-center justify-center p-2'>
           {icon}
           {children}
         </div>
