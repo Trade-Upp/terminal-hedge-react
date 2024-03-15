@@ -109,7 +109,8 @@ export default function PositionTablePosition({ position, thClasses, client, sym
 
   function getQuantity() {
     let positionSize = parseFloat(positionAmtInputValue)
-    if (positionAmtInputValue.slice(-1) == '%') {
+    const positionAmtInputValueString = '' + positionAmtInputValue
+    if (positionAmtInputValueString.slice(-1) == '%') {
       positionSize = getPositionSizeFromPercent()
     }
     if (positionSize == 0) {
