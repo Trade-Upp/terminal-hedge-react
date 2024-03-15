@@ -18,12 +18,10 @@ export default function MarketOrderCreator({ client, symbol }) {
         client.setTimeOffset(timeOffset)
         return client.getSymbolPriceTicker({ symbol: symbol })
       })
-      .catch(err => { notifyError(err.message), console.error(err) })
       .then(result => {
         currentPrice = parseFloat(result.price)
         return roundQuantity(symbol, size / currentPrice)
       })
-      .catch(err => { notifyError(err.message), console.error(err) })
       .then(result => {
         quantity = result
         return client.submitNewOrder({
@@ -34,7 +32,6 @@ export default function MarketOrderCreator({ client, symbol }) {
           quantity: quantity
         })
       })
-      .catch(err => { notifyError(err.message), console.error(err) })
       .then(result => { notifySuccess('ok'), console.log('new order info', result) })
       .catch(err => { notifyError(err.message), console.error(err) })
   }

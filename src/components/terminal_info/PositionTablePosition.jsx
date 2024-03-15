@@ -49,7 +49,6 @@ export default function PositionTablePosition({ position, thClasses, client, sym
         roundedQuantity = newQuantity
         return client.fetchTimeOffset()
       })
-      .catch((err) => { notifyError(err.message), console.error(err.message) })
       .then(timeOffset => {
         client.setTimeOffset(timeOffset)
         const newOrderInfo = {
@@ -61,7 +60,6 @@ export default function PositionTablePosition({ position, thClasses, client, sym
         }
         return client.submitNewOrder(newOrderInfo)
       })
-      .catch((err) => { notifyError(err.message), console.error(err.message) })
       .then((result) => {
         notifySuccess('ok')
         console.log('new order info', result);
@@ -80,12 +78,10 @@ export default function PositionTablePosition({ position, thClasses, client, sym
         roundedPrice = transformedPrice
         return roundQuantity(symbol, quantity)
       })
-      .catch((err) => notifyError(err.message))
       .then((newQuantity) => {
         roundedQuantity = newQuantity
         return client.fetchTimeOffset()
       })
-      .catch((err) => { notifyError(err.message), console.error(err.message) })
       .then(timeOffset => {
         client.setTimeOffset(timeOffset)
         const newOrderInfo = {
@@ -99,7 +95,6 @@ export default function PositionTablePosition({ position, thClasses, client, sym
         }
         return client.submitNewOrder(newOrderInfo)
       })
-      .catch((err) => { notifyError(err.message), console.error(err.message) })
       .then((result) => {
         notifySuccess('ok')
         console.log('new order info', result);
