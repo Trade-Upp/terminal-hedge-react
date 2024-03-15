@@ -2,7 +2,7 @@ import { useState } from "react"
 import Input from "../Input"
 import OpenLongShortButtons from "./OpenLongShortButtons"
 import { roundPrice, roundQuantity } from "../../utils/ExchangeInfoUtil"
-import { notifySuccess } from "../notifications/NotificationsComponent"
+import { notifyError, notifySuccess } from "../notifications/NotificationsComponent"
 
 export default function StopMarketOrderCreator({ client, symbol }) {
 
@@ -19,12 +19,10 @@ export default function StopMarketOrderCreator({ client, symbol }) {
         roundedStopPrice = result
         return roundQuantity(symbol, size / stopPrice)
       })
-      .catch(err => { notifyError(err.message), console.error(err) })
       .then(result => {
         quantity = result
         return client.fetchTimeOffset()
       })
-      .catch(err => { notifyError(err.message), console.error(err) })
       .then(timeOffset => {
         client.setTimeOffset(timeOffset)
         return client.submitNewOrder({
@@ -37,7 +35,6 @@ export default function StopMarketOrderCreator({ client, symbol }) {
           quantity: quantity
         })
       })
-      .catch(err => { notifyError(err.message), console.error(err) })
       .then(result => { notifySuccess('ok'), console.log('new order info', result) })
       .catch(err => { notifyError(err.message), console.error(err) })
   }

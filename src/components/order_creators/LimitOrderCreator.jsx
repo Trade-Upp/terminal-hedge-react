@@ -20,12 +20,10 @@ export default function LimitOrderCreator({ client, symbol }) {
         // XXX: in python there was `size / currentPrice`
         return roundQuantity(symbol, size / price)
       })
-      .catch(err => { notifyError(err.message), console.error(err) })
       .then(result => {
         quantity = result
         return client.fetchTimeOffset()
       })
-      .catch(err => { notifyError(err.message), console.error(err) })
       .then(timeOffset => {
         client.setTimeOffset(timeOffset)
         return client.submitNewOrder({
@@ -38,7 +36,6 @@ export default function LimitOrderCreator({ client, symbol }) {
           quantity: quantity
         })
       })
-      .catch(err => { notifyError(err.message), console.error(err) })
       .then(result => { notifySuccess('ok'), console.log('new order info', result) })
       .catch(err => { notifyError(err.message), console.error(err) })
   }

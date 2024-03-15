@@ -62,11 +62,6 @@ export default function Terminal({ configIndex }) {
                 client.setTimeOffset(timeOffset)
                 return client.getAccountInformation()
               })
-              .catch((error) => {
-                notifyError(error.message)
-                console.error(error)
-                setLoading(true)
-              })
               .then(accountInformation => {
                 if (accountInformation == undefined) {
                   return
@@ -74,6 +69,8 @@ export default function Terminal({ configIndex }) {
                 setLoading(false)
               })
               .catch(err => {
+                notifyError(err.message)
+                console.error(err)
                 setLoading(true)
               })
           }

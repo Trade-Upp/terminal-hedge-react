@@ -18,6 +18,9 @@ export default function NotificationsComponent() {
 
   function updateNotificationList() {
     const newNotificationList = getNewNotificationList()
+    if (newNotificationList.length == notificationList.length) {
+      return
+    }
     setNotificationList(newNotificationList)
   }
 
@@ -25,17 +28,7 @@ export default function NotificationsComponent() {
     let newNotificationList = notificationList.filter((notification) => {
       return notification.endTime > new Date().getTime()
     })
-    return newNotificationList.map((notification) => {
-      notification.progress = getNewProgress(notification)
-      return notification
-    })
-  }
-
-  function getNewProgress(notification) {
-    const now = new Date().getTime()
-    const allProgress = notification.endTime - notification.startTime
-    const currentTimeDiff = now - notification.startTime
-    return currentTimeDiff / allProgress
+    return [...newNotificationList]
   }
 
   useEffect(() => {
@@ -65,7 +58,7 @@ export default function NotificationsComponent() {
         result = (
           <WarningNotification
             key={index}
-            progress={notification.progress}
+            durationInSeconds={notification.durationInSeconds}
             onClick={() => onNotificationClick(index)}>
             {notification.message}
           </WarningNotification>
@@ -75,7 +68,7 @@ export default function NotificationsComponent() {
         result = (
           <ErrorNotification
             key={index}
-            progress={notification.progress}
+            durationInSeconds={notification.durationInSeconds}
             onClick={() => onNotificationClick(index)}>
             {notification.message}
           </ErrorNotification>
@@ -85,7 +78,7 @@ export default function NotificationsComponent() {
         result = (
           <SuccessNotification
             key={index}
-            progress={notification.progress}
+            durationInSeconds={notification.durationInSeconds}
             onClick={() => onNotificationClick(index)}>
             {notification.message}
           </SuccessNotification>
@@ -121,14 +114,14 @@ export function notifySuccess(message, durationInSeconds = 5) {
 }
 
 function addNotification(message, durationInSeconds, type) {
-  setNotificationListFunction([
-    ...notificationListArray,
+  setNotificationListFunction((prevNotificationList) => [
+    ...prevNotificationList,
     {
       message: message,
       type: type,
       startTime: new Date().getTime(),
       endTime: new Date().getTime() + durationInSeconds * 1000,
-      progress: 0
+      durationInSeconds: durationInSeconds
     }
   ])
 }

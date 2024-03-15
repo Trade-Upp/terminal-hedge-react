@@ -3,7 +3,7 @@ import { faCheckCircle } from "@fortawesome/free-solid-svg-icons"
 import NotificationProgress from './NotificationProgress'
 
 
-export default function SuccessNotification({ children, progress, onClick }) {
+export default function SuccessNotification({ children, durationInSeconds, onClick }) {
 
   const icon = <FontAwesomeIcon icon={faCheckCircle} className="mr-2" />
 
@@ -13,7 +13,7 @@ export default function SuccessNotification({ children, progress, onClick }) {
         <div className='rounded bg-green-700 opacity-80 text-slate-50 h-12'>
           <NotificationProgress
             icon={icon}
-            progress={progress}
+            durationInSeconds={durationInSeconds}
             progressColor={'bg-green-600'}>
             {children}
           </NotificationProgress>

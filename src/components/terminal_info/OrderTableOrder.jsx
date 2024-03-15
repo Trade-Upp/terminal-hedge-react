@@ -1,3 +1,5 @@
+import { notifyError } from "../notifications/NotificationsComponent"
+
 export default function OrderTableOrder({ order, thClasses, client }) {
 
   function getFilled() {
@@ -21,7 +23,6 @@ export default function OrderTableOrder({ order, thClasses, client }) {
         client.setTimeOffset(timeOffset)
         return client.cancelOrder({ symbol: order.symbol, orderId: order.orderId })
       })
-      .catch(err => { notifyError(err.message), console.error(err) })
       .then((result) => console.log('cancelled order: ' + result))
       .catch(err => { notifyError(err.message), console.error(err) })
   }
