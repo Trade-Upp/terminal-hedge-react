@@ -1,13 +1,8 @@
-export default function NotificationProgress({ icon, children, progress, progressColor }) {
+export default function NotificationProgress({ icon, children, durationInSeconds, progressColor }) {
 
-  const maxProgress = 258
-  const maxProgressStyle = {
-    width: maxProgress + 'px',
-    marginTop: '-0.125rem',
-  }
   const currentProgressStyle = {
-    ...maxProgressStyle,
-    width: progress * maxProgress
+    marginTop: '-0.125rem',
+    animation: `expand-width-to-258 ${durationInSeconds}s forwards linear`
   }
 
   return (

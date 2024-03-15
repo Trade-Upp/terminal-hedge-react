@@ -3,7 +3,7 @@ import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons"
 import NotificationProgress from './NotificationProgress'
 
 
-export default function WarningNotification({ children, progress, onClick }) {
+export default function WarningNotification({ children, durationInSeconds, onClick }) {
 
   const icon = <FontAwesomeIcon icon={faCircleExclamation} className="mr-2" />
 
@@ -13,7 +13,7 @@ export default function WarningNotification({ children, progress, onClick }) {
         <div className='rounded bg-yellow-700 opacity-80 text-slate-50 h-12'>
           <NotificationProgress
             icon={icon}
-            progress={progress}
+            durationInSeconds={durationInSeconds}
             progressColor={'bg-yellow-600'}>
             {children}
           </NotificationProgress>
