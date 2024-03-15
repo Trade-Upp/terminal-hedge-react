@@ -1,3 +1,4 @@
+import { notifyError } from "../notifications/NotificationsComponent";
 import OrderTableOrder from "./OrderTableOrder";
 
 export default function OrderTable({ orders, client, symbol }) {

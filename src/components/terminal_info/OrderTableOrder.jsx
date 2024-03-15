@@ -1,3 +1,5 @@
+import { notifyError } from "../notifications/NotificationsComponent"
+
 export default function OrderTableOrder({ order, thClasses, client }) {
 
   function getFilled() {

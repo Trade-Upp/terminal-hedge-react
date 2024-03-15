@@ -2,7 +2,7 @@ import { useState } from "react"
 import Input from "../Input"
 import OpenLongShortButtons from "./OpenLongShortButtons"
 import { roundPrice, roundQuantity } from "../../utils/ExchangeInfoUtil"
-import { notifySuccess } from "../notifications/NotificationsComponent"
+import { notifyError, notifySuccess } from "../notifications/NotificationsComponent"
 
 export default function StopLimitOrderCreator({ client, symbol }) {
 
