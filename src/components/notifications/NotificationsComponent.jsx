@@ -121,8 +121,8 @@ export function notifySuccess(message, durationInSeconds = 5) {
 }
 
 function addNotification(message, durationInSeconds, type) {
-  setNotificationListFunction([
-    ...notificationListArray,
+  setNotificationListFunction((prevNotificationList) => [
+    ...prevNotificationList,
     {
       message: message,
       type: type,
