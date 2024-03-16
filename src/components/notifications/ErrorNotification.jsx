@@ -10,7 +10,7 @@ export default function ErrorNotification({ children, durationInSeconds, onClick
   return (
     <>
       <div className='m-4 pointer-events-auto select-none' onClick={onClick}>
-        <div className='rounded bg-red-700 opacity-80 text-slate-50'>
+        <div className='transition duration-300 rounded bg-red-700 opacity-80 hover:opacity-100 text-slate-50'>
           <NotificationProgress
             icon={icon}
             durationInSeconds={durationInSeconds}
