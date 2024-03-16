@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons"
 import NotificationProgress from './NotificationProgress'
+import NotificationUnitContainer from './NotificationUnitContainer'
 
 
 export default function ErrorNotification({ children, durationInSeconds, onClick }) {
@@ -9,7 +10,7 @@ export default function ErrorNotification({ children, durationInSeconds, onClick
 
   return (
     <>
-      <div className='m-4 pointer-events-auto select-none' onClick={onClick}>
+      <NotificationUnitContainer onClick={onClick}>
         <div className='transition duration-300 rounded bg-red-700 opacity-80 hover:opacity-100 text-slate-50'>
           <NotificationProgress
             icon={icon}
@@ -18,7 +19,7 @@ export default function ErrorNotification({ children, durationInSeconds, onClick
             {children}
           </NotificationProgress>
         </div>
-      </div>
+      </NotificationUnitContainer>
     </>
   )
 }
