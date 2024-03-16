@@ -1,4 +1,4 @@
-import { notifyError } from "../notifications/NotificationsComponent"
+import { notifyError, notifySuccess } from "../notifications/NotificationsComponent"
 
 export default function OrderTableOrder({ order, thClasses, client }) {
 
@@ -23,7 +23,7 @@ export default function OrderTableOrder({ order, thClasses, client }) {
         client.setTimeOffset(timeOffset)
         return client.cancelOrder({ symbol: order.symbol, orderId: order.orderId })
       })
-      .then((result) => console.log('cancelled order: ' + result))
+      .then((result) => { notifySuccess('cancelled order'); console.log('cancelled order: ', result) })
       .catch(err => { notifyError(err.message), console.error(err) })
   }
 

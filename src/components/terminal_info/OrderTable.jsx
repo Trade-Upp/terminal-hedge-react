@@ -1,4 +1,4 @@
-import { notifyError } from "../notifications/NotificationsComponent";
+import { notifyError, notifySuccess } from "../notifications/NotificationsComponent";
 import OrderTableOrder from "./OrderTableOrder";
 
 export default function OrderTable({ orders, client, symbol }) {
@@ -14,7 +14,7 @@ export default function OrderTable({ orders, client, symbol }) {
         client.setTimeOffset(timeOffset)
         return client.cancelAllOpenOrders({ symbol: symbol })
       })
-      .then()
+      .then((result) => notifySuccess('ok'))
       .catch(err => { notifyError(err.message), console.error(err) })
   }
 
