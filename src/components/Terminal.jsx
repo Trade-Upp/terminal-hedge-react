@@ -91,6 +91,15 @@ export default function Terminal({ configIndex }) {
     return usdtBalanceBalance
   }
 
+  const getCrossUnrealizedPnl = async () => {
+    const timeOffset = await client.fetchTimeOffset()
+    client.setTimeOffset(timeOffset)
+    const balance = await client.getBalance()
+    const usdtBalance = balance.find((element) => element.asset == 'USDT')
+    const crossUnPnl = Math.round(usdtBalance.crossUnPnl * 100) / 100
+    return crossUnPnl
+  }
+
   function updateSymbol(event) {
     const value = event.target.value
     const dataCopy = { ...data }
@@ -122,6 +131,21 @@ export default function Terminal({ configIndex }) {
             <Input label="API SECRET" defaultValue={data.apiSecret} updateValue={updateApiSecret} />
             <Input label="testnet" type='checkbox' defaultValue={data.testnet} />
             <ReadonlyInput label="Balance" updatableValue={client == undefined ? undefined : getBalance} />
+            <ReadonlyInput
+              label="Cross PNL"
+              updatableValue={client == undefined ? undefined : getCrossUnrealizedPnl}
+              getValueColor={(value) => {
+                value = parseFloat(value)
+                if (value < 0) {
+                  return 'red'
+                }
+                else if (value > 0) {
+                  return 'green'
+                }
+                else {
+                  return 'rgba(255, 255, 255, 0.87)'
+                }
+              }} />
             <div className='rounded jumbotron-bg p-2 m-2'>
               {loading && <Loading />}
               {!loading &&
